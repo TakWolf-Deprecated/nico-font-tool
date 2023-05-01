@@ -39,7 +39,7 @@ createFontSheet(
     fontFilePath = joinPath(fonts_dir, "unifont/unifont-15.0.01.ttf"),
     glyphAdjustWidth = -1,
 )
-font_service.create_font_sheet(
+createFontSheet(
     fontSize = 24,
     outputsName = "roboto",
     outputsDir = outputsDir,
