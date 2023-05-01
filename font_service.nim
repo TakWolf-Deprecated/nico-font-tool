@@ -103,11 +103,9 @@ proc createFontSheet*(
     for x in 0 ..< rgbaImage.width:
       var pixel: ColorRGBX
       case sheetData[y][x]:
-        of glyphDataTransparent:
-          discard
         of glyphDataSolid:
           pixel.a = 255
-        else:
+        of glyphDataBorder:
           pixel.r = 255
           pixel.b = 255
           pixel.a = 255
