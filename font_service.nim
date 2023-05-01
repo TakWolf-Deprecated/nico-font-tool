@@ -34,6 +34,7 @@ proc createFontSheet*(
   var sheetData: seq[seq[uint8]]
   for _ in 0 ..< lineHeight:
     sheetData.add(@[glyphDataBorder])
+  var sheetWidth = 1
 
   # 字母表
   var alphabet = ""
@@ -68,13 +69,14 @@ proc createFontSheet*(
         else:
           sheetData[y].add(glyphDataTransparent)
       sheetData[y].add(glyphDataBorder)
+    sheetWidth += advanceWidth + 1
 
     # 添加到字母表
     alphabet &= $rune
 
   # 图集底部添加 1 像素边界
   var sheetDataBottomRow: seq[uint8]
-  for _ in 0 ..< sheetData[0].len():
+  for _ in 0 ..< sheetWidth:
     sheetDataBottomRow.add(glyphDataBorder)
   sheetData.add(sheetDataBottomRow)
 
@@ -98,7 +100,7 @@ proc createFontSheet*(
 
   # 写入 rgba .png 图集
   let rgbaPngFilePath = joinPath(outputsRgbaDir, outputsName & ".png")
-  let rgbaImage = newImage(sheetData[0].len(), sheetData.len())
+  let rgbaImage = newImage(sheetWidth, sheetData.len())
   for y in 0 ..< rgbaImage.height:
     for x in 0 ..< rgbaImage.width:
       var pixel: ColorRGBX
