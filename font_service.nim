@@ -88,7 +88,7 @@ proc createFontSheet*(
   let palettePngFilePath = joinPath(outputsPaletteDir, outputsName & ".png")
   # TODO
   echo "make: ", palettePngFilePath
-  
+
   # 写入 palette .dat 字母表
   let paletteDatFilePath = joinPath(outputsPaletteDir, outputsName & ".png.dat")
   writeFile(paletteDatFilePath, alphabet)
