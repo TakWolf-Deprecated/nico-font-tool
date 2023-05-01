@@ -1,4 +1,4 @@
-import std/os
+import os
 import font_service
 
 const fontsDir = "assets/fonts/"
@@ -38,4 +38,10 @@ createFontSheet(
     outputsDir = outputsDir,
     fontFilePath = fonts_dir & "unifont/unifont-15.0.01.ttf",
     glyphAdjustWidth = -1,
+)
+font_service.create_font_sheet(
+    fontSize = 24,
+    outputsName = "roboto",
+    outputsDir = outputsDir,
+    fontFilePath = fonts_dir & "roboto/Roboto-Regular.ttf",
 )
