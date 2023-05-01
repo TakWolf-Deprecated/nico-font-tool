@@ -109,6 +109,8 @@ proc createFontSheet*(
           pixel.r = 255
           pixel.b = 255
           pixel.a = 255
+        else:
+          discard
       rgbaImage.data[rgbaImage.dataIndex(x, y)] = pixel
   rgbaImage.writeFile(rgbaPngFilePath)
   echo "make: ", rgbaPngFilePath
