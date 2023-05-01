@@ -1,5 +1,5 @@
 import os
-import font_service
+import nico_font_tool
 
 const fontsDir = "assets/fonts/"
 const outputsDir = "outputs/"
