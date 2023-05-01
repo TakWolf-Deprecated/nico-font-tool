@@ -8,3 +8,5 @@ license       = "MIT"
 # Dependencies
 
 requires "nim >= 1.6.12"
+requires "pixie >= 5.0.6"
+requires "nimPNG >= 0.3.2"
