@@ -10,7 +10,7 @@ createFontSheet(
     fontSize = 8,
     outputsName = "quan",
     outputsDir = outputsDir,
-    fontFilePath = fontsDir & "quan/quan.ttf",
+    fontFilePath = joinPath(fontsDir, "quan/quan.ttf"),
     glyphAdjustWidth = -1,
     glyphAdjustHeight = -1,
 )
@@ -18,7 +18,7 @@ createFontSheet(
     fontSize = 12,
     outputsName = "fusion-pixel-monospaced",
     outputsDir = outputsDir,
-    fontFilePath = fonts_dir & "fusion-pixel-monospaced/fusion-pixel-monospaced.otf",
+    fontFilePath = joinPath(fonts_dir, "fusion-pixel-monospaced/fusion-pixel-monospaced.otf"),
     glyphOffsetY = -1,
     glyphAdjustWidth = -1,
     glyphAdjustHeight = -1,
@@ -27,7 +27,7 @@ createFontSheet(
     fontSize = 12,
     outputsName = "fusion-pixel-proportional",
     outputsDir = outputsDir,
-    fontFilePath = fonts_dir & "fusion-pixel-proportional/fusion-pixel-proportional.otf",
+    fontFilePath = joinPath(fonts_dir, "fusion-pixel-proportional/fusion-pixel-proportional.otf"),
     glyphOffsetY = -1,
     glyphAdjustWidth = -1,
     glyphAdjustHeight = -1,
@@ -36,12 +36,12 @@ createFontSheet(
     fontSize = 16,
     outputsName = "unifont",
     outputsDir = outputsDir,
-    fontFilePath = fonts_dir & "unifont/unifont-15.0.01.ttf",
+    fontFilePath = joinPath(fonts_dir, "unifont/unifont-15.0.01.ttf"),
     glyphAdjustWidth = -1,
 )
 font_service.create_font_sheet(
     fontSize = 24,
     outputsName = "roboto",
     outputsDir = outputsDir,
-    fontFilePath = fonts_dir & "roboto/Roboto-Regular.ttf",
+    fontFilePath = joinPath(fonts_dir, "roboto/Roboto-Regular.ttf"),
 )
