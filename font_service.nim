@@ -61,14 +61,13 @@ proc createFontSheet*(
 
     # 二值化字形，合并到图集
     for y in 0 ..< glyphImage.height:
-      var sheetDataRow = sheetData[y]
       for x in 0 ..< glyphImage.width:
         let alpha = glyphImage.data[glyphImage.width * y + x].a
         if alpha > 127:
-          sheetDataRow.add(glyphDataSolid)
+          sheetData[y].add(glyphDataSolid)
         else:
-          sheetDataRow.add(glyphDataTransparent)
-      sheetDataRow.add(glyphDataBorder)
+          sheetData[y].add(glyphDataTransparent)
+      sheetData[y].add(glyphDataBorder)
 
     # 添加到字母表
     alphabet &= $rune
