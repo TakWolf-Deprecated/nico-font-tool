@@ -16,7 +16,7 @@ proc createFontSheet*(
     fontFilePath: string,
     glyphOffsetX, glyphOffsetY, glyphAdjustWidth, glyphAdjustHeight: int = 0,
 ) =
-  # 加载 OpenType
+  # 加载字体文件
   let fontFileExt = splitFile(fontFilePath).ext.toLowerAscii
   if fontFileExt != ".otf" and fontFileExt != ".ttf":
     raise newException(CatchableError, "Unsupported font format")
@@ -38,7 +38,7 @@ proc createFontSheet*(
   # 字母表
   var alphabet = ""
 
-  # 遍历全部字符
+  # 遍历字体全部字符
   var glyphOrder: seq[(Rune, int)]
   for rune, glyphId in openType.cmap.runeToGlyphId:
     glyphOrder.add((rune, int(glyphId)))
