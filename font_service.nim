@@ -62,7 +62,7 @@ proc createFontSheet*(
     # 二值化字形，合并到图集
     for y in 0 ..< glyphImage.height:
       for x in 0 ..< glyphImage.width:
-        let alpha = glyphImage.data[glyphImage.width * y + x].a
+        let alpha = glyphImage.data[glyphImage.dataIndex(x, y)].a
         if alpha > 127:
           sheetData[y].add(glyphDataSolid)
         else:
@@ -98,7 +98,21 @@ proc createFontSheet*(
 
   # 写入 rgba .png 图集
   let rgbaPngFilePath = joinPath(outputsRgbaDir, outputsName & ".png")
-  # TODO
+  let rgbaImage = newImage(sheetData[0].len(), sheetData.len())
+  for y in 0 ..< rgbaImage.height:
+    for x in 0 ..< rgbaImage.width:
+      var pixel: ColorRGBX
+      case sheetData[y][x]:
+        of glyphDataTransparent:
+          discard
+        of glyphDataSolid:
+          pixel.a = 255
+        else:
+          pixel.r = 255
+          pixel.b = 255
+          pixel.a = 255
+      rgbaImage.data[rgbaImage.dataIndex(x, y)] = pixel
+  rgbaImage.writeFile(rgbaPngFilePath)
   echo "make: ", rgbaPngFilePath
 
   # 写入 rgba .dat 字母表
