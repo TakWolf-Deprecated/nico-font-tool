@@ -7,7 +7,7 @@ license       = "MIT"
 
 srcDir        = "src"
 installExt    = @["nim"]
-bin           = @["nicofont"]
+bin           = @["nico_font_tool/nicofont"]
 
 # Dependencies
 
