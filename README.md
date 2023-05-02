@@ -1,3 +1,5 @@
+![logo](docs/logo_x4.png)
+
 # NICO Font tool
 
 A tool for converting opentype fonts to [NICO Game Framework](https://github.com/ftsf/nico) format fonts.

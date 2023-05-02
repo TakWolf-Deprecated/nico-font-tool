@@ -1,8 +1,8 @@
 import os
 import nico_font_tool
 
-const fontsDir = "assets/fonts/"
-const outputsDir = "outputs/"
+const fontsDir = "fonts/"
+const outputsDir = "examples/assets/fonts"
 
 removeDir(outputsDir)
 

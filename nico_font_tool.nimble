@@ -5,6 +5,10 @@ author        = "TakWolf"
 description   = "A tool for converting opentype fonts to NICO Game Framework format fonts."
 license       = "MIT"
 
+srcDir        = "src"
+installExt    = @["nim"]
+bin           = @["nicofont"]
+
 # Dependencies
 
 requires "nim >= 1.6.12"

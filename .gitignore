@@ -1,3 +1,5 @@
 .idea/
 nimbledeps/
-outputs/
+
+examples/assets/fonts/palette
+examples/assets/fonts/rgba
