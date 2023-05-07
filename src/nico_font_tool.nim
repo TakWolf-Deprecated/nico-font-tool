@@ -5,7 +5,7 @@ import sugar
 import unicode
 import pixie
 import pixie/fontformats/opentype
-import pixie/fileforats/png
+import pixie/fileformats/png
 
 const glyphDataTransparent: uint8 = 0
 const glyphDataSolid: uint8 = 1
