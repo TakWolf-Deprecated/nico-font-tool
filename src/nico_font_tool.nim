@@ -5,6 +5,7 @@ import sugar
 import unicode
 import pixie
 import pixie/fontformats/opentype
+import pixie/fileforats/png
 
 const glyphDataTransparent: uint8 = 0
 const glyphDataSolid: uint8 = 1
@@ -47,8 +48,10 @@ proc createFontSheet*(
   for (rune, glyphId) in glyphOrder:
     # 获取字符宽度
     var advanceWidth = 0
+    var height = 0
     if glyphId < openType.hmtx.hMetrics.len():
       advanceWidth = int(math.ceil(float32(openType.hmtx.hMetrics[glyphId].advanceWidth) / pxUnits))
+    height = int(math.ceil(float32(openType.hhea.ascender - openType.hhea.descender) / pxUnits))
     if advanceWidth <= 0:
       continue
     advanceWidth += glyphAdjustWidth
@@ -81,13 +84,26 @@ proc createFontSheet*(
   sheetData.add(sheetDataBottomRow)
 
   # 创建 palette 输出文件夹
-  let outputsPaletteDir = joinPath(outputsDir, "palette")
+  let outputsPaletteDir = joinPath(outputsDir, "grey")
   createDir(outputsPaletteDir)
 
   # 写入 palette .png 图集
   let palettePngFilePath = joinPath(outputsPaletteDir, outputsName & ".png")
   # TODO
   echo "make: ", palettePngFilePath
+
+  var paletteImagedata: seq[uint8]
+  var pixel: uint8
+  for y in 0 ..< sheetData.len():
+    for x in 0 ..< sheetWidth:
+      case sheetData[y][x]:
+        of glyphDataSolid: pixel = 1
+        of glyphDataBorder: pixel = 66 # 0
+        else: pixel = 199 # 2
+      paletteImagedata.add(pixel)
+
+  var palettePngData = encodePng(sheetWidth, sheetData.len(), 1, paletteImagedata[0].addr, paletteImagedata.len())
+  writeFile(palettePngFilePath, palettePngData)
 
   # 写入 palette .dat 字母表
   let paletteDatFilePath = joinPath(outputsPaletteDir, outputsName & ".png.dat")
