@@ -48,10 +48,8 @@ proc createFontSheet*(
   for (rune, glyphId) in glyphOrder:
     # 获取字符宽度
     var advanceWidth = 0
-    var height = 0
     if glyphId < openType.hmtx.hMetrics.len():
       advanceWidth = int(math.ceil(float32(openType.hmtx.hMetrics[glyphId].advanceWidth) / pxUnits))
-    height = int(math.ceil(float32(openType.hhea.ascender - openType.hhea.descender) / pxUnits))
     if advanceWidth <= 0:
       continue
     advanceWidth += glyphAdjustWidth
