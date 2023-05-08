@@ -12,7 +12,7 @@ createFontSheet(
     outputsDir = outputsDir,
     fontFilePath = joinPath(fontsDir, "quan/quan.ttf"),
     glyphAdjustWidth = -1,
-    glyphAdjustHeight = -1,
+    glyphAdjustHeight = 0,
 )
 createFontSheet(
     fontSize = 12,
