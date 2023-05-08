@@ -5,7 +5,7 @@ import sugar
 import unicode
 import pixie
 import pixie/fontformats/opentype
-import pixie/fileformats/png
+import nimPNG
 
 const glyphDataTransparent: uint8 = 0
 const glyphDataSolid: uint8 = 1
@@ -82,26 +82,24 @@ proc createFontSheet*(
   sheetData.add(sheetDataBottomRow)
 
   # 创建 palette 输出文件夹
-  let outputsPaletteDir = joinPath(outputsDir, "grey")
+  let outputsPaletteDir = joinPath(outputsDir, "palette")
   createDir(outputsPaletteDir)
 
   # 写入 palette .png 图集
   let palettePngFilePath = joinPath(outputsPaletteDir, outputsName & ".png")
-  # TODO
-  echo "make: ", palettePngFilePath
-
-  var paletteImagedata: seq[uint8]
-  var pixel: uint8
+  var paletteBitmap: seq[uint8]
   for y in 0 ..< sheetData.len():
     for x in 0 ..< sheetWidth:
-      case sheetData[y][x]:
-        of glyphDataSolid: pixel = 1
-        of glyphDataBorder: pixel = 66 # 0
-        else: pixel = 199 # 2
-      paletteImagedata.add(pixel)
-
-  var palettePngData = encodePng(sheetWidth, sheetData.len(), 1, paletteImagedata[0].addr, paletteImagedata.len())
-  writeFile(palettePngFilePath, palettePngData)
+      paletteBitmap.add(sheetData[y][x])
+  let paletteEnc = makePNGEncoder()
+  paletteEnc.modeOut.colorType = LCT_PALETTE
+  paletteEnc.modeOut.bitDepth = 8
+  paletteEnc.modeOut.addPalette(255, 255, 255, 255)
+  paletteEnc.modeOut.addPalette(0, 0, 0, 255)
+  paletteEnc.modeOut.addPalette(255, 0, 255, 255)
+  paletteEnc.autoConvert = false
+  discard savePNG32(palettePngFilePath, paletteBitmap, sheetWidth, sheetData.len(), paletteEnc)
+  echo "make: ", palettePngFilePath
 
   # 写入 palette .dat 字母表
   let paletteDatFilePath = joinPath(outputsPaletteDir, outputsName & ".png.dat")
@@ -114,21 +112,30 @@ proc createFontSheet*(
 
   # 写入 rgba .png 图集
   let rgbaPngFilePath = joinPath(outputsRgbaDir, outputsName & ".png")
-  let rgbaImage = newImage(sheetWidth, sheetData.len())
-  for y in 0 ..< rgbaImage.height:
-    for x in 0 ..< rgbaImage.width:
-      var pixel: ColorRGBX
-      case sheetData[y][x]:
-        of glyphDataSolid:
-          pixel.a = 255
-        of glyphDataBorder:
-          pixel.r = 255
-          pixel.b = 255
-          pixel.a = 255
-        else:
-          discard
-      rgbaImage.data[rgbaImage.dataIndex(x, y)] = pixel
-  rgbaImage.writeFile(rgbaPngFilePath)
+  var rgbaBitmap: seq[uint8]
+  for y in 0 ..< sheetData.len():
+    for x in 0 ..< sheetWidth:
+      let color = sheetData[y][x]
+      if color == glyphDataTransparent:
+        rgbaBitmap.add(0)
+        rgbaBitmap.add(0)                
+        rgbaBitmap.add(0)
+        rgbaBitmap.add(0)
+      elif color == glyphDataSolid:
+        rgbaBitmap.add(0)
+        rgbaBitmap.add(0)                
+        rgbaBitmap.add(0)
+        rgbaBitmap.add(255)
+      else:
+        rgbaBitmap.add(255)
+        rgbaBitmap.add(0)                
+        rgbaBitmap.add(255)
+        rgbaBitmap.add(255)
+  var rgbaEnc = makePNGEncoder()
+  rgbaEnc.modeOut.colorType = LCT_RGBA
+  rgbaEnc.modeOut.bitDepth = 8
+  rgbaEnc.autoConvert = false
+  discard savePNG32(rgbaPngFilePath, rgbaBitmap, sheetWidth, sheetData.len(), rgbaEnc)
   echo "make: ", rgbaPngFilePath
 
   # 写入 rgba .dat 字母表
