@@ -90,11 +90,26 @@ proc createFontSheet*(
   var paletteBitmap: seq[uint8]
   for y in 0 ..< sheetData.len():
     for x in 0 ..< sheetWidth:
-      paletteBitmap.add(sheetData[y][x])
+      let color = sheetData[y][x]
+      if color == glyphDataTransparent:
+        paletteBitmap.add(0)
+        paletteBitmap.add(0)                
+        paletteBitmap.add(0)
+        paletteBitmap.add(0)
+      elif color == glyphDataSolid:
+        paletteBitmap.add(0)
+        paletteBitmap.add(0)                
+        paletteBitmap.add(0)
+        paletteBitmap.add(255)
+      else:
+        paletteBitmap.add(255)
+        paletteBitmap.add(0)                
+        paletteBitmap.add(255)
+        paletteBitmap.add(255)
   let paletteEnc = makePNGEncoder()
   paletteEnc.modeOut.colorType = LCT_PALETTE
   paletteEnc.modeOut.bitDepth = 8
-  paletteEnc.modeOut.addPalette(255, 255, 255, 255)
+  paletteEnc.modeOut.addPalette(0, 0, 0, 0)
   paletteEnc.modeOut.addPalette(0, 0, 0, 255)
   paletteEnc.modeOut.addPalette(255, 0, 255, 255)
   paletteEnc.autoConvert = false
