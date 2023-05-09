@@ -16,6 +16,7 @@ proc createFontSheet*(
     outputsName, outputsDir: string,
     fontFilePath: string,
     glyphOffsetX, glyphOffsetY, glyphAdjustWidth, glyphAdjustHeight: int = 0,
+    autoHeightAlign = true # 当校准为负数时, 会自动对齐超过lineHeight并且首部为空白的字体
 ) =
   # 加载字体文件
   let fontFileExt = splitFile(fontFilePath).ext.toLowerAscii
@@ -29,7 +30,11 @@ proc createFontSheet*(
   # 计算字体参数
   let pxUnits = float32(openType.head.unitsPerEm) / float32(fontSize)
   var lineHeight = int(math.ceil(float32(openType.hhea.ascender - openType.hhea.descender) / pxUnits))
+  var autoHeight = autoHeightAlign
+  let lineHeightDefault = lineHeight
   lineHeight += glyphAdjustHeight
+  if glyphAdjustHeight >= 0:
+    autoHeight = false
 
   # 图集对象，初始化左边界
   var sheetData: seq[seq[uint8]]
@@ -57,19 +62,42 @@ proc createFontSheet*(
       continue
 
     # 栅格化
-    let glyphImage = newImage(advanceWidth, lineHeight)
+    let glyphImage = newImage(advanceWidth, if autoHeight: lineHeightDefault else: lineHeight)
     glyphImage.fillText(font.typeset($rune), translate(vec2(float32(glyphOffsetX), float32(glyphOffsetY))))
     echo "rasterize rune: ", rune.int32, " - ", rune, " - ", glyphImage.width, " - ", glyphImage.height
 
-    # 二值化字形，合并到图集
+    # 二值化字形，添加到临时组
+    var chs: seq[seq[uint8]]
     for y in 0 ..< glyphImage.height:
+      chs.add(@[])
       for x in 0 ..< glyphImage.width:
         let alpha = glyphImage.data[glyphImage.dataIndex(x, y)].a
         if alpha > 127:
-          sheetData[y].add(glyphDataSolid)
+          chs[y].add(glyphDataSolid)
         else:
-          sheetData[y].add(glyphDataTransparent)
-      sheetData[y].add(glyphDataBorder)
+          chs[y].add(glyphDataTransparent)
+      chs[y].add(glyphDataBorder)
+
+    # 探测该字符是否越位得到yOffset
+    var yOffset = 0
+    block autoHeightChk:
+      if autoHeight:
+        let yn = lineHeightDefault - lineHeight
+        if yn < 1: break
+        for i in 0..<yn:
+          block autoHeight2:
+            for x in 0..<chs[0].len():
+              if chs[^1][x] == glyphDataSolid:
+                for xx in 0..<chs[0].len():
+                  if chs[0][xx] == glyphDataSolid:
+                    break autoHeightChk
+                  else:
+                    yOffset.inc
+                    break autoHeight2
+
+    for y in 0..<lineHeight:
+      sheetData[y].add(chs[y + yOffset])
+
     sheetWidth += advanceWidth + 1
 
     # 添加到字母表
@@ -93,17 +121,17 @@ proc createFontSheet*(
       let color = sheetData[y][x]
       if color == glyphDataTransparent:
         paletteBitmap.add(0)
-        paletteBitmap.add(0)                
+        paletteBitmap.add(0)
         paletteBitmap.add(0)
         paletteBitmap.add(0)
       elif color == glyphDataSolid:
         paletteBitmap.add(0)
-        paletteBitmap.add(0)                
+        paletteBitmap.add(0)
         paletteBitmap.add(0)
         paletteBitmap.add(255)
       else:
         paletteBitmap.add(255)
-        paletteBitmap.add(0)                
+        paletteBitmap.add(0)
         paletteBitmap.add(255)
         paletteBitmap.add(255)
   let paletteEnc = makePNGEncoder()
@@ -133,17 +161,17 @@ proc createFontSheet*(
       let color = sheetData[y][x]
       if color == glyphDataTransparent:
         rgbaBitmap.add(0)
-        rgbaBitmap.add(0)                
+        rgbaBitmap.add(0)
         rgbaBitmap.add(0)
         rgbaBitmap.add(0)
       elif color == glyphDataSolid:
         rgbaBitmap.add(0)
-        rgbaBitmap.add(0)                
+        rgbaBitmap.add(0)
         rgbaBitmap.add(0)
         rgbaBitmap.add(255)
       else:
         rgbaBitmap.add(255)
-        rgbaBitmap.add(0)                
+        rgbaBitmap.add(0)
         rgbaBitmap.add(255)
         rgbaBitmap.add(255)
   var rgbaEnc = makePNGEncoder()

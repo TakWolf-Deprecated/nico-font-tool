@@ -1,7 +1,7 @@
 import os
 import nico_font_tool
 
-const fontsDir = "fonts/"
+const fontsDir = "../fonts/"
 const outputsDir = "examples/assets/fonts"
 
 removeDir(outputsDir)
@@ -13,6 +13,7 @@ createFontSheet(
     fontFilePath = joinPath(fontsDir, "quan/quan.ttf"),
     glyphAdjustWidth = -1,
     glyphAdjustHeight = -1,
+    autoHeightAlign = true # 默认是true
 )
 createFontSheet(
     fontSize = 12,
