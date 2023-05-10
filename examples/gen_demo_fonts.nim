@@ -1,7 +1,7 @@
 import os
 import nico_font_tool
 
-const fontsDir = "fonts/"
+const fontsDir = "../fonts/"
 const outputsDir = "examples/assets/fonts"
 
 removeDir(outputsDir)
@@ -13,7 +13,10 @@ createFontSheet(
     fontFilePath = joinPath(fontsDir, "quan/quan.ttf"),
     glyphAdjustWidth = -1,
     glyphAdjustHeight = -1,
+    autoHeightAlign = true, # 默认false
+    autoAlphaAlign = true, # 默认为true
 )
+
 createFontSheet(
     fontSize = 12,
     outputsName = "fusion-pixel-monospaced",
@@ -31,6 +34,7 @@ createFontSheet(
     glyphOffsetY = -1,
     glyphAdjustWidth = -1,
     glyphAdjustHeight = -1,
+    autoHeightAlign = true
 )
 createFontSheet(
     fontSize = 16,
@@ -38,6 +42,9 @@ createFontSheet(
     outputsDir = outputsDir,
     fontFilePath = joinPath(fonts_dir, "unifont/unifont-15.0.01.ttf"),
     glyphAdjustWidth = -1,
+    glyphAdjustHeight = -6,
+    autoHeightAlign = true
+    autoAlphaAlign = false
 )
 createFontSheet(
     fontSize = 24,
