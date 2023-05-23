@@ -10,13 +10,15 @@ proc gameUpdate(dt: float32) =
 proc gameDraw() =
   cls()
 
-  setColor(7)
+  cursor(0, 0)
+
   setFont(0)
-  print("Hello World!", 0, 0)
-  
+  setColor(7)
+  print("Hello World!")
+
+  setFont(1)  
   setColor(9)
-  setFont(1)
-  print("你好，世界！", 0, 16)
+  print("你好，世界！")
 
 nico.init("nico", "nico-font-tool")
 nico.createWindow("Hello World", 128, 128, 3)
