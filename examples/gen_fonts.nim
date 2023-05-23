@@ -20,10 +20,10 @@ proc convertFont(
   let (sheetData, alphabet) = createSheet(
     fontFilePath,
     fontSize,
-      glyphOffsetX, 
-      glyphOffsetY, 
-      glyphAdjustWidth, 
-      glyphAdjustHeight,
+    glyphOffsetX, 
+    glyphOffsetY, 
+    glyphAdjustWidth, 
+    glyphAdjustHeight,
   )
 
   savePalettePng(sheetData, outputsPaletteDir, outputsName)
