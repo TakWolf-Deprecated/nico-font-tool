@@ -12,6 +12,14 @@ nimble install nico_font_tool
 
 ## Usage
 
+### Command
+
+TODO
+
+### Scripts
+
+See: [gen_fonts](examples/gen_fonts.nim)
+
 ```nim
 import nico_font_tool
 
