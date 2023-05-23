@@ -2,7 +2,7 @@
 
 version       = "0.0.0"
 author        = "TakWolf"
-description   = "A tool for converting opentype fonts to NICO Game Framework format fonts."
+description   = "A tool for converting fonts to NICO Game Framework format fonts."
 license       = "MIT"
 
 # Dependencies
