@@ -5,6 +5,8 @@ author        = "TakWolf"
 description   = "A tool for converting fonts to NICO Game Framework format fonts."
 license       = "MIT"
 
+skipDirs = @["tests", "examples"]
+
 # Dependencies
 
 requires "nim >= 1.4.0"
