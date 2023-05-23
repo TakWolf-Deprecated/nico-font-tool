@@ -7,16 +7,16 @@ import pixie
 import pixie/fontformats/opentype
 import nimPNG
 
-const glyphDataTransparent: uint8 = 0
-const glyphDataSolid: uint8 = 1
-const glyphDataBorder: uint8 = 2
+const 
+  glyphDataTransparent: uint8 = 0
+  glyphDataSolid: uint8 = 1
+  glyphDataBorder: uint8 = 2
 
-proc createFontSheet*(
-    fontSize: uint,
-    outputsName, outputsDir: string,
-    fontFilePath: string,
-    glyphOffsetX, glyphOffsetY, glyphAdjustWidth, glyphAdjustHeight: int = 0,
-) =
+proc createSheet*(
+  fontFilePath: string,
+  fontSize: uint,
+  glyphOffsetX, glyphOffsetY, glyphAdjustWidth, glyphAdjustHeight: int = 0,
+): (seq[seq[uint8]], string) =
   # 加载字体文件
   let fontFileExt = splitFile(fontFilePath).ext.toLowerAscii
   if fontFileExt != ".otf" and fontFileExt != ".ttf":
@@ -35,7 +35,6 @@ proc createFontSheet*(
   var sheetData: seq[seq[uint8]]
   for _ in 0 ..< lineHeight:
     sheetData.add(@[glyphDataBorder])
-  var sheetWidth = 1
 
   # 字母表
   var alphabet = ""
@@ -48,7 +47,7 @@ proc createFontSheet*(
   for (rune, glyphId) in glyphOrder:
     # 获取字符宽度
     var advanceWidth = 0
-    if glyphId < openType.hmtx.hMetrics.len():
+    if glyphId < openType.hmtx.hMetrics.len:
       advanceWidth = int(math.ceil(float32(openType.hmtx.hMetrics[glyphId].advanceWidth) / pxUnits))
     if advanceWidth <= 0:
       continue
@@ -70,90 +69,84 @@ proc createFontSheet*(
         else:
           sheetData[y].add(glyphDataTransparent)
       sheetData[y].add(glyphDataBorder)
-    sheetWidth += advanceWidth + 1
 
     # 添加到字母表
     alphabet &= $rune
 
-  # 图集底部添加 1 像素边界
-  var sheetDataBottomRow: seq[uint8]
-  for _ in 0 ..< sheetWidth:
-    sheetDataBottomRow.add(glyphDataBorder)
-  sheetData.add(sheetDataBottomRow)
+  return (sheetData, alphabet)
 
-  # 创建 palette 输出文件夹
-  let outputsPaletteDir = joinPath(outputsDir, "palette")
-  createDir(outputsPaletteDir)
-
-  # 写入 palette .png 图集
-  let palettePngFilePath = joinPath(outputsPaletteDir, outputsName & ".png")
-  var paletteBitmap: seq[uint8]
-  for y in 0 ..< sheetData.len():
-    for x in 0 ..< sheetWidth:
+proc savePalettePng*(
+  sheetData: seq[seq[uint8]],
+  outputsDir: string,
+  outputsName: string,
+) =
+  let pngFilePath = joinPath(outputsDir, outputsName & ".png")
+  var bitmap: seq[uint8]
+  for y in 0 ..< sheetData.len:
+    for x in 0 ..< sheetData[0].len:
       let color = sheetData[y][x]
       if color == glyphDataTransparent:
-        paletteBitmap.add(0)
-        paletteBitmap.add(0)                
-        paletteBitmap.add(0)
-        paletteBitmap.add(0)
+        bitmap.add(0)
+        bitmap.add(0)                
+        bitmap.add(0)
+        bitmap.add(0)
       elif color == glyphDataSolid:
-        paletteBitmap.add(0)
-        paletteBitmap.add(0)                
-        paletteBitmap.add(0)
-        paletteBitmap.add(255)
+        bitmap.add(0)
+        bitmap.add(0)                
+        bitmap.add(0)
+        bitmap.add(255)
       else:
-        paletteBitmap.add(255)
-        paletteBitmap.add(0)                
-        paletteBitmap.add(255)
-        paletteBitmap.add(255)
-  let paletteEnc = makePNGEncoder()
-  paletteEnc.modeOut.colorType = LCT_PALETTE
-  paletteEnc.modeOut.bitDepth = 8
-  paletteEnc.modeOut.addPalette(0, 0, 0, 0)
-  paletteEnc.modeOut.addPalette(0, 0, 0, 255)
-  paletteEnc.modeOut.addPalette(255, 0, 255, 255)
-  paletteEnc.autoConvert = false
-  discard savePNG32(palettePngFilePath, paletteBitmap, sheetWidth, sheetData.len(), paletteEnc)
-  echo "make: ", palettePngFilePath
+        bitmap.add(255)
+        bitmap.add(0)                
+        bitmap.add(255)
+        bitmap.add(255)
+  let enc = makePNGEncoder()
+  enc.modeOut.colorType = LCT_PALETTE
+  enc.modeOut.bitDepth = 8
+  enc.modeOut.addPalette(0, 0, 0, 0)
+  enc.modeOut.addPalette(0, 0, 0, 255)
+  enc.modeOut.addPalette(255, 0, 255, 255)
+  enc.autoConvert = false
+  discard savePNG32(pngFilePath, bitmap, sheetData[0].len, sheetData.len, enc)
+  echo "make: ", pngFilePath
 
-  # 写入 palette .dat 字母表
-  let paletteDatFilePath = joinPath(outputsPaletteDir, outputsName & ".png.dat")
-  writeFile(paletteDatFilePath, alphabet)
-  echo "make: ", paletteDatFilePath
-
-  # 创建 rgba 输出文件夹
-  let outputsRgbaDir = joinPath(outputsDir, "rgba")
-  createDir(outputsRgbaDir)
-
-  # 写入 rgba .png 图集
-  let rgbaPngFilePath = joinPath(outputsRgbaDir, outputsName & ".png")
-  var rgbaBitmap: seq[uint8]
-  for y in 0 ..< sheetData.len():
-    for x in 0 ..< sheetWidth:
+proc saveRgbaPng*(
+  sheetData: seq[seq[uint8]],
+  outputsDir: string,
+  outputsName: string,
+) =
+  let pngFilePath = joinPath(outputsDir, outputsName & ".png")
+  var bitmap: seq[uint8]
+  for y in 0 ..< sheetData.len:
+    for x in 0 ..< sheetData[0].len:
       let color = sheetData[y][x]
       if color == glyphDataTransparent:
-        rgbaBitmap.add(0)
-        rgbaBitmap.add(0)                
-        rgbaBitmap.add(0)
-        rgbaBitmap.add(0)
+        bitmap.add(0)
+        bitmap.add(0)                
+        bitmap.add(0)
+        bitmap.add(0)
       elif color == glyphDataSolid:
-        rgbaBitmap.add(0)
-        rgbaBitmap.add(0)                
-        rgbaBitmap.add(0)
-        rgbaBitmap.add(255)
+        bitmap.add(0)
+        bitmap.add(0)                
+        bitmap.add(0)
+        bitmap.add(255)
       else:
-        rgbaBitmap.add(255)
-        rgbaBitmap.add(0)                
-        rgbaBitmap.add(255)
-        rgbaBitmap.add(255)
-  var rgbaEnc = makePNGEncoder()
-  rgbaEnc.modeOut.colorType = LCT_RGBA
-  rgbaEnc.modeOut.bitDepth = 8
-  rgbaEnc.autoConvert = false
-  discard savePNG32(rgbaPngFilePath, rgbaBitmap, sheetWidth, sheetData.len(), rgbaEnc)
-  echo "make: ", rgbaPngFilePath
+        bitmap.add(255)
+        bitmap.add(0)                
+        bitmap.add(255)
+        bitmap.add(255)
+  var enc = makePNGEncoder()
+  enc.modeOut.colorType = LCT_RGBA
+  enc.modeOut.bitDepth = 8
+  enc.autoConvert = false
+  discard savePNG32(pngFilePath, bitmap, sheetData[0].len, sheetData.len, enc)
+  echo "make: ", pngFilePath
 
-  # 写入 rgba .dat 字母表
-  let rgbaDatFilePath = joinPath(outputsRgbaDir, outputsName & ".png.dat")
-  writeFile(rgbaDatFilePath, alphabet)
-  echo "make: ", rgbaDatFilePath
+proc saveDatFile*(
+  alphabet: string,
+  outputsDir: string,
+  outputsName: string,
+) =
+  let datFilePath = joinPath(outputsDir, outputsName & ".png.dat")
+  writeFile(datFilePath, alphabet)
+  echo "make: ", datFilePath

@@ -3,45 +3,57 @@ import nico_font_tool
 
 const fontsDir = "assets/fonts/"
 const outputsDir = "examples/assets/fonts"
+const outputsPaletteDir = joinPath(outputsDir, "palette")
+const outputsRgbaDir = joinPath(outputsDir, "rgba")
 
 removeDir(outputsDir)
+createDir(outputsPaletteDir)
+createDir(outputsRgbaDir)
 
-createFontSheet(
-    fontSize = 8,
+proc convertFont(
+  fontFileName: string,
+  outputsName: string,
+  fontSize: uint = 0,
+  glyphOffsetX, glyphOffsetY, glyphAdjustWidth, glyphAdjustHeight: int = 0,
+) =
+  let fontFilePath = joinPath(fontsDir, fontFileName)
+  let (sheetData, alphabet) = createSheet(
+    fontFilePath,
+    fontSize,
+      glyphOffsetX, 
+      glyphOffsetY, 
+      glyphAdjustWidth, 
+      glyphAdjustHeight,
+  )
+
+  savePalettePng(sheetData, outputsPaletteDir, outputsName)
+  saveDatFile(alphabet, outputsPaletteDir, outputsName)
+  
+  saveRgbaPng(sheetData, outputsRgbaDir, outputsName)
+  saveDatFile(alphabet, outputsRgbaDir, outputsName)
+
+convertFont(
+    fontFileName = "quan/quan.ttf",
     outputsName = "quan",
-    outputsDir = outputsDir,
-    fontFilePath = joinPath(fontsDir, "quan/quan.ttf"),
-    glyphAdjustWidth = -1,
-    glyphAdjustHeight = -1,
+    fontSize = 8,
 )
-createFontSheet(
-    fontSize = 12,
+convertFont(
+    fontFileName = "fusion-pixel-monospaced/fusion-pixel-monospaced.otf",
     outputsName = "fusion-pixel-monospaced",
-    outputsDir = outputsDir,
-    fontFilePath = joinPath(fonts_dir, "fusion-pixel-monospaced/fusion-pixel-monospaced.otf"),
-    glyphOffsetY = -1,
-    glyphAdjustWidth = -1,
-    glyphAdjustHeight = -1,
-)
-createFontSheet(
     fontSize = 12,
+)
+convertFont(
+    fontFileName = "fusion-pixel-proportional/fusion-pixel-proportional.otf",
     outputsName = "fusion-pixel-proportional",
-    outputsDir = outputsDir,
-    fontFilePath = joinPath(fonts_dir, "fusion-pixel-proportional/fusion-pixel-proportional.otf"),
-    glyphOffsetY = -1,
-    glyphAdjustWidth = -1,
-    glyphAdjustHeight = -1,
+    fontSize = 12,
 )
-createFontSheet(
-    fontSize = 16,
+convertFont(
+    fontFileName = "unifont/unifont-15.0.01.ttf",
     outputsName = "unifont",
-    outputsDir = outputsDir,
-    fontFilePath = joinPath(fonts_dir, "unifont/unifont-15.0.01.ttf"),
-    glyphAdjustWidth = -1,
+    fontSize = 16,
 )
-createFontSheet(
-    fontSize = 24,
+convertFont(
+    fontFileName = "roboto/Roboto-Regular.ttf",
     outputsName = "roboto",
-    outputsDir = outputsDir,
-    fontFilePath = joinPath(fonts_dir, "roboto/Roboto-Regular.ttf"),
+    fontSize = 24,
 )
