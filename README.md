@@ -12,7 +12,17 @@ nimble install nico_font_tool
 
 ## Usage
 
-TODO
+```nim
+import nico_font_tool
+
+let (sheetData, alphabet) = createSheet("your/font/file/path.ttf", 8)
+
+savePalettePng(sheetData, "outputs/palette/dir", "outputsName")
+saveDatFile(alphabet, "outputs/palette/dir", "outputsName")
+  
+saveRgbaPng(sheetData, "outputs/rgba/dir", "outputsName")
+saveDatFile(alphabet, "outputs/rgba/dir", "outputsName")
+```
 
 ## Dependencies
 
