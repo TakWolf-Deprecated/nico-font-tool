@@ -1,7 +1,8 @@
 .idea/
 nimbledeps/
 
+libSDL2.dylib
 examples/gen_fonts
-examples/demo
+examples/nico_demo
 examples/assets/fonts/palette/
 examples/assets/fonts/rgba/
