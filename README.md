@@ -1,10 +1,18 @@
-![logo](docs/logo_x4.png)
-
 # NICO Font tool
 
 A tool for converting opentype fonts to [NICO Game Framework](https://github.com/ftsf/nico) format fonts.
 
 There is also a Python version see: [nico-font-tool.python](https://github.com/TakWolf/nico-font-tool.python).
+
+## Installation
+
+```commandline
+nimble install nico_font_tool
+```
+
+## Usage
+
+TODO
 
 ## Dependencies
 

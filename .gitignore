@@ -1,5 +1,7 @@
 .idea/
 nimbledeps/
 
-examples/assets/fonts/palette
-examples/assets/fonts/rgba
+examples/assets/fonts/palette/
+examples/assets/fonts/rgba/
+
+examples/demo
