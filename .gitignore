@@ -2,6 +2,7 @@
 nimbledeps/
 
 libSDL2.dylib
+nicofont
 examples/gen_fonts
 examples/nico_demo
 examples/assets/fonts/palette/
