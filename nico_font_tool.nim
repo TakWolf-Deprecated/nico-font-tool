@@ -21,17 +21,17 @@ proc createSheet*(
   glyphAdjustHeight: int = 0,
 ): tuple[sheetData: seq[seq[uint8]], alphabet: string] =
   # 加载字体文件
-  let fontFileExt = splitFile(fontFilePath).ext.toLowerAscii
+  let fontFileExt = splitFile(fontFilePath).ext.toLowerAscii()
   if fontFileExt != ".otf" and fontFileExt != ".ttf":
     raise newException(CatchableError, "Unsupported font format")
   let openType = parseOpenType(readFile(fontFilePath))
   let font = readFont(fontFilePath)
-  font.size = float32(fontSize)
+  font.size = fontSize.float32
   echo "loaded font file: ", fontFilePath
 
   # 计算字体参数
-  let pxUnits = float32(openType.head.unitsPerEm) / float32(fontSize)
-  var lineHeight = int(math.ceil(float32(openType.hhea.ascender - openType.hhea.descender) / pxUnits))
+  let pxUnits = openType.head.unitsPerEm.float32 / fontSize.float32
+  var lineHeight = math.ceil((openType.hhea.ascender - openType.hhea.descender).float32 / pxUnits).int
   lineHeight += glyphAdjustHeight
 
   # 图集对象，初始化左边界
@@ -45,13 +45,13 @@ proc createSheet*(
   # 遍历字体全部字符
   var glyphOrder: seq[(Rune, int)]
   for rune, glyphId in openType.cmap.runeToGlyphId:
-    glyphOrder.add((rune, int(glyphId)))
+    glyphOrder.add((rune, glyphId.int))
   glyphOrder.sort((x, y) => cmp(x[0].int32, y[0].int32))
   for (rune, glyphId) in glyphOrder:
     # 获取字符宽度
     var advanceWidth = 0
     if glyphId < openType.hmtx.hMetrics.len:
-      advanceWidth = int(math.ceil(float32(openType.hmtx.hMetrics[glyphId].advanceWidth) / pxUnits))
+      advanceWidth = math.ceil(openType.hmtx.hMetrics[glyphId].advanceWidth.float32 / pxUnits).int
     if advanceWidth <= 0:
       continue
     advanceWidth += glyphAdjustWidth
@@ -60,7 +60,7 @@ proc createSheet*(
 
     # 栅格化
     let glyphImage = newImage(advanceWidth, lineHeight)
-    glyphImage.fillText(font.typeset($rune), translate(vec2(float32(glyphOffsetX), float32(glyphOffsetY))))
+    glyphImage.fillText(font.typeset($rune), translate(vec2(glyphOffsetX.float32, glyphOffsetY.float32)))
     echo "rasterize rune: ", rune.int32, " - ", rune, " - ", glyphImage.width, " - ", glyphImage.height
 
     # 二值化字形，合并到图集
