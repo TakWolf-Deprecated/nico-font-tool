@@ -16,7 +16,7 @@ proc createSheet*(
   fontFilePath: string,
   fontSize: uint,
   glyphOffsetX, glyphOffsetY, glyphAdjustWidth, glyphAdjustHeight: int = 0,
-): (seq[seq[uint8]], string) =
+): tuple[sheetData: seq[seq[uint8]], alphabet: string] =
   # 加载字体文件
   let fontFileExt = splitFile(fontFilePath).ext.toLowerAscii
   if fontFileExt != ".otf" and fontFileExt != ".ttf":
