@@ -24,6 +24,8 @@ proc createSheet*(
   let fontFileExt = splitFile(fontFilePath).ext.toLowerAscii()
   if fontFileExt != ".otf" and fontFileExt != ".ttf":
     raise newException(CatchableError, "Unsupported font format")
+  if fontSize == 0:
+    raise newException(CatchableError, "OpenType need a font size")
   let openType = parseOpenType(readFile(fontFilePath))
   let font = readFont(fontFilePath)
   font.size = fontSize.float32
