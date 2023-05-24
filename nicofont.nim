@@ -26,7 +26,10 @@ var fontFilePath: string = ""
 var outputsDir: string = ""
 var outputsName: string = ""
 var fontSize: uint = 0
-var glyphOffsetX, glyphOffsetY, glyphAdjustWidth, glyphAdjustHeight: int = 0
+var glyphOffsetX: int = 0
+var glyphOffsetY: int = 0
+var glyphAdjustWidth: int = 0
+var glyphAdjustHeight: int = 0
 var mode: string = "palette"
 
 var argumentPosition = 0

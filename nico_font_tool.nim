@@ -14,8 +14,11 @@ const
 
 proc createSheet*(
   fontFilePath: string,
-  fontSize: uint,
-  glyphOffsetX, glyphOffsetY, glyphAdjustWidth, glyphAdjustHeight: int = 0,
+  fontSize: uint = 0,
+  glyphOffsetX: int = 0, 
+  glyphOffsetY: int = 0, 
+  glyphAdjustWidth: int = 0, 
+  glyphAdjustHeight: int = 0,
 ): tuple[sheetData: seq[seq[uint8]], alphabet: string] =
   # 加载字体文件
   let fontFileExt = splitFile(fontFilePath).ext.toLowerAscii

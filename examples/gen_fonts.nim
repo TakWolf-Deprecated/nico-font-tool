@@ -14,7 +14,10 @@ proc convertFont(
   fontFileName: string,
   outputsName: string,
   fontSize: uint = 0,
-  glyphOffsetX, glyphOffsetY, glyphAdjustWidth, glyphAdjustHeight: int = 0,
+  glyphOffsetX: int = 0, 
+  glyphOffsetY: int = 0, 
+  glyphAdjustWidth: int = 0, 
+  glyphAdjustHeight: int = 0,
 ) =
   let fontFilePath = joinPath(fontsDir, fontFileName)
   let (sheetData, alphabet) = createSheet(
