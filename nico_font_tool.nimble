@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.0.1"
+version       = "0.0.2"
 author        = "TakWolf"
 description   = "A tool for converting fonts to NICO Game Framework format fonts."
 license       = "MIT"
