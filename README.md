@@ -14,7 +14,31 @@ nimble install nico_font_tool
 
 ### Command
 
-TODO
+For example:
+
+```commandline
+nicofont ./assets/fonts/quan/quan.ttf ./examples/assets/fonts/demo quan --fontSize=8
+```
+
+All params:
+
+```text
+nicofont {fontFilePath} {outputsDir} {outputsName}
+
+options:
+  -fs, --fontSize
+      Glyph rasterize size when using OpenType font.
+  -gox, --glyphOffsetX
+      Glyph offset x.
+  -goy, --glyphOffsetY
+      Glyph offset y.
+  -gaw, --glyphAdjustWidth
+      Glyph adjust width.
+  -gah, --glyphAdjustHeight
+      Glyph adjust width.
+  -m, --mode
+      Png sheet color mode, can be 'palette' or 'rgba', default is 'palette'.
+```
 
 ### Scripts
 
