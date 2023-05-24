@@ -35,7 +35,7 @@ options:
   -gaw, --glyphAdjustWidth
       Glyph adjust width.
   -gah, --glyphAdjustHeight
-      Glyph adjust width.
+      Glyph adjust height.
   -m, --mode
       Png sheet color mode, can be 'palette' or 'rgba', default is 'palette'.
 ```

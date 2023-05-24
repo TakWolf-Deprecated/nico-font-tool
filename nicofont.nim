@@ -16,7 +16,7 @@ proc echoHelp() =
   echo "  -gaw, --glyphAdjustWidth"
   echo "      Glyph adjust width."
   echo "  -gah, --glyphAdjustHeight"
-  echo "      Glyph adjust width."
+  echo "      Glyph adjust height."
   echo "  -m, --mode"
   echo "      Png sheet color mode, can be 'palette' or 'rgba', default is 'palette'."
 
