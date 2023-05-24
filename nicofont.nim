@@ -2,9 +2,9 @@ import os
 import parseopt
 import parseutils
 import strutils
+import nico_font_tool
 
-let cmdParams = commandLineParams()
-if cmdParams.len <= 0:
+proc echoHelp() =
   echo "nicofont {fontFilePath} {outputsDir} {outputsName}\n"
   echo "options:"
   echo "  -fs, --fontSize"
@@ -18,7 +18,11 @@ if cmdParams.len <= 0:
   echo "  -gah, --glyphAdjustHeight"
   echo "      Glyph adjust width."
   echo "  -m, --mode"
-  echo "      Png sheet color type, can be 'palette' or 'rgba', default is 'palette'."
+  echo "      Png sheet color mode, can be 'palette' or 'rgba', default is 'palette'."
+
+let cmdParams = commandLineParams()
+if cmdParams.len <= 0:
+  echoHelp()
   quit(0)
 var params = initOptParser(cmdParams)
 
@@ -56,7 +60,7 @@ for kind, key, val in params.getopt():
         of "glyphAdjustHeight".toLowerAscii():
           glyphAdjustHeight = parseInt(val)
         of "mode":
-          mode = val
+          mode = val.toLowerAscii()
     of cmdShortOption:
       case key.toLowerAscii():
         of "fs":
@@ -70,7 +74,7 @@ for kind, key, val in params.getopt():
         of "gah":
           glyphAdjustHeight = parseInt(val)
         of "m":
-          mode = val
+          mode = val.toLowerAscii()
     of cmdEnd:
       break
 
@@ -78,8 +82,47 @@ echo "fontFilePath: ", fontFilePath
 echo "outputsDir: ", outputsDir
 echo "outputsName: ", outputsName
 echo "fontSize: ", fontSize
-echo "glyphOffsetX: ", glyphOffsetX 
+echo "glyphOffsetX: ", glyphOffsetX
 echo "glyphOffsetY: ", glyphOffsetY
 echo "glyphAdjustWidth: ", glyphAdjustWidth
 echo "glyphAdjustHeight: ", glyphAdjustHeight
 echo "mode: ", mode
+echo ""
+
+if fontFilePath == "":
+  echo "'fontFilePath' must not be empty\n"
+  echoHelp()
+  quit(1)
+
+if outputsDir == "":
+  echo "'outputsDir' must not be empty\n"
+  echoHelp()
+  quit(1)
+
+if outputsName == "":
+  echo "'outputsName' must not be empty\n"
+  echoHelp()
+  quit(1)
+
+if mode != "palette" and mode != "rgba":
+  echo "Unsupported mode: ", mode, "\n"
+  echoHelp()
+  quit(1)
+
+let (sheetData, alphabet) = createSheet(
+  fontFilePath,
+  fontSize,
+  glyphOffsetX,
+  glyphOffsetY,
+  glyphAdjustWidth,
+  glyphAdjustHeight,
+)
+
+createDir(outputsDir)
+
+if mode == "palette":
+  savePalettePng(sheetData, outputsDir, outputsName)
+else:
+  saveRgbaPng(sheetData, outputsDir, outputsName)
+
+saveDatFile(alphabet, outputsDir, outputsName)
