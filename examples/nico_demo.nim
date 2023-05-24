@@ -16,7 +16,7 @@ proc gameDraw() =
   setColor(7)
   print("Hello World!")
 
-  setFont(1)  
+  setFont(1)
   setColor(9)
   print("你好，世界！")
 

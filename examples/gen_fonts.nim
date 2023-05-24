@@ -16,16 +16,16 @@ proc convertFont(
   fontSize: uint = 0,
   glyphOffsetX: int = 0, 
   glyphOffsetY: int = 0, 
-  glyphAdjustWidth: int = 0, 
+  glyphAdjustWidth: int = 0,
   glyphAdjustHeight: int = 0,
 ) =
   let fontFilePath = joinPath(fontsDir, fontFileName)
   let (sheetData, alphabet) = createSheet(
     fontFilePath,
     fontSize,
-    glyphOffsetX, 
-    glyphOffsetY, 
-    glyphAdjustWidth, 
+    glyphOffsetX,
+    glyphOffsetY,
+    glyphAdjustWidth,
     glyphAdjustHeight,
   )
 
@@ -36,27 +36,27 @@ proc convertFont(
   saveDatFile(alphabet, outputsRgbaDir, outputsName)
 
 convertFont(
-    fontFileName = "quan/quan.ttf",
-    outputsName = "quan",
-    fontSize = 8,
+  fontFileName = "quan/quan.ttf",
+  outputsName = "quan",
+  fontSize = 8,
 )
 convertFont(
-    fontFileName = "fusion-pixel-monospaced/fusion-pixel-monospaced.otf",
-    outputsName = "fusion-pixel-monospaced",
-    fontSize = 12,
+  fontFileName = "fusion-pixel-monospaced/fusion-pixel-monospaced.otf",
+  outputsName = "fusion-pixel-monospaced",
+  fontSize = 12,
 )
 convertFont(
-    fontFileName = "fusion-pixel-proportional/fusion-pixel-proportional.otf",
-    outputsName = "fusion-pixel-proportional",
-    fontSize = 12,
+  fontFileName = "fusion-pixel-proportional/fusion-pixel-proportional.otf",
+  outputsName = "fusion-pixel-proportional",
+  fontSize = 12,
 )
 convertFont(
-    fontFileName = "unifont/unifont-15.0.01.ttf",
-    outputsName = "unifont",
-    fontSize = 16,
+  fontFileName = "unifont/unifont-15.0.01.ttf",
+  outputsName = "unifont",
+  fontSize = 16,
 )
 convertFont(
-    fontFileName = "roboto/Roboto-Regular.ttf",
-    outputsName = "roboto",
-    fontSize = 24,
+  fontFileName = "roboto/Roboto-Regular.ttf",
+  outputsName = "roboto",
+  fontSize = 24,
 )

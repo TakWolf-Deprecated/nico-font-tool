@@ -7,7 +7,7 @@ import pixie
 import pixie/fontformats/opentype
 import nimPNG
 
-const 
+const
   glyphDataTransparent: uint8 = 0
   glyphDataSolid: uint8 = 1
   glyphDataBorder: uint8 = 2
@@ -92,17 +92,17 @@ proc savePalettePng*(
       let color = sheetData[y][x]
       if color == glyphDataTransparent:
         bitmap.add(0)
-        bitmap.add(0)                
+        bitmap.add(0)
         bitmap.add(0)
         bitmap.add(0)
       elif color == glyphDataSolid:
         bitmap.add(0)
-        bitmap.add(0)                
+        bitmap.add(0)
         bitmap.add(0)
         bitmap.add(255)
       else:
         bitmap.add(255)
-        bitmap.add(0)                
+        bitmap.add(0)
         bitmap.add(255)
         bitmap.add(255)
   let enc = makePNGEncoder()
@@ -127,17 +127,17 @@ proc saveRgbaPng*(
       let color = sheetData[y][x]
       if color == glyphDataTransparent:
         bitmap.add(0)
-        bitmap.add(0)                
+        bitmap.add(0)
         bitmap.add(0)
         bitmap.add(0)
       elif color == glyphDataSolid:
         bitmap.add(0)
-        bitmap.add(0)                
+        bitmap.add(0)
         bitmap.add(0)
         bitmap.add(255)
       else:
         bitmap.add(255)
-        bitmap.add(0)                
+        bitmap.add(0)
         bitmap.add(255)
         bitmap.add(255)
   var enc = makePNGEncoder()
