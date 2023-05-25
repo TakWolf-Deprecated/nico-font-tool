@@ -5,8 +5,8 @@ author        = "TakWolf"
 description   = "A tool for converting fonts to NICO Game Framework format fonts."
 license       = "MIT"
 
-skipDirs      = @["tests", "examples"]
-installExt    = @["nim"]
+#installDirs  = @["src"]
+#skipDirs     = @["tests", "examples"]
 bin           = @["nicofont"]
 
 # Dependencies
