@@ -6,7 +6,6 @@ description   = "A tool for converting fonts to NICO Game Framework format fonts
 license       = "MIT"
 
 skipDirs      = @["tests", "examples"]
-installExt    = @["nim"]
 bin           = @["nicofont"]
 
 # Dependencies
