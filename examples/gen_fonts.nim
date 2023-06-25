@@ -36,18 +36,33 @@ proc convertFont(
   saveDatFile(alphabet, outputsRgbaDir, outputsName)
 
 convertFont(
-  fontFileName = "quan/quan.ttf",
-  outputsName = "quan",
+  fontFileName = "fusion-pixel/fusion-pixel-8px-monospaced.otf",
+  outputsName = "fusion-pixel-8px-monospaced",
   fontSize = 8,
 )
 convertFont(
-  fontFileName = "fusion-pixel-monospaced/fusion-pixel-monospaced.otf",
-  outputsName = "fusion-pixel-monospaced",
+  fontFileName = "fusion-pixel/fusion-pixel-8px-proportional.otf",
+  outputsName = "fusion-pixel-8px-proportional",
+  fontSize = 8,
+)
+convertFont(
+  fontFileName = "fusion-pixel/fusion-pixel-10px-monospaced.otf",
+  outputsName = "fusion-pixel-10px-monospaced",
+  fontSize = 10,
+)
+convertFont(
+  fontFileName = "fusion-pixel/fusion-pixel-10px-proportional.otf",
+  outputsName = "fusion-pixel-10px-proportional",
+  fontSize = 10,
+)
+convertFont(
+  fontFileName = "fusion-pixel/fusion-pixel-12px-monospaced.otf",
+  outputsName = "fusion-pixel-12px-monospaced",
   fontSize = 12,
 )
 convertFont(
-  fontFileName = "fusion-pixel-proportional/fusion-pixel-proportional.otf",
-  outputsName = "fusion-pixel-proportional",
+  fontFileName = "fusion-pixel/fusion-pixel-12px-proportional.otf",
+  outputsName = "fusion-pixel-12px-proportional",
   fontSize = 12,
 )
 convertFont(
